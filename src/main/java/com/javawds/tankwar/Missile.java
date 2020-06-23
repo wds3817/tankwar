@@ -18,17 +18,18 @@ public class Missile {
     private final Direction direction;
 
     Image getImage() {
-        switch (direction) {
-            case UP: return Tools.getImage("missileU.gif");
-            case DOWN: return Tools.getImage("missileD.gif");
-            case LEFT: return Tools.getImage("missileL.gif");
-            case RIGHT: return Tools.getImage("missileR.gif");
-            case UPLEFT: return Tools.getImage( "missileLU.gif");
-            case UPRIGHT: return Tools.getImage( "missileRU.gif");
-            case DOWNLEFT: return Tools.getImage("missileLD.gif");
-            case DOWNRIGHT: return Tools.getImage( "missileRD.gif");
-        }
-        return null;
+        return direction.getImage("missile");
+//        switch (direction) {
+//            case UP: return Tools.getImage("missileU.gif");
+//            case DOWN: return Tools.getImage("missileD.gif");
+//            case LEFT: return Tools.getImage("missileL.gif");
+//            case RIGHT: return Tools.getImage("missileR.gif");
+//            case LEFT_UP: return Tools.getImage( "missileLU.gif");
+//            case RIGHT_UP: return Tools.getImage( "missileRU.gif");
+//            case LEFT_DOWN: return Tools.getImage("missileLD.gif");
+//            case RIGHT_DOWN: return Tools.getImage( "missileRD.gif");
+//        }
+//        return null;
     }
     void move() {
         switch (direction) {
@@ -44,19 +45,19 @@ public class Missile {
             case RIGHT:
                 x+=SPEED;
                 break;
-            case UPLEFT:
+            case LEFT_UP:
                 x-=SPEED;
                 y-=SPEED;
                 break;
-            case UPRIGHT:
+            case RIGHT_UP:
                 x+=SPEED;
                 y-=SPEED;
                 break;
-            case DOWNLEFT:
+            case LEFT_DOWN:
                 x-=SPEED;
                 y+=SPEED;
                 break;
-            case DOWNRIGHT:
+            case RIGHT_DOWN:
                 x+=SPEED;
                 y+=SPEED;
                 break;

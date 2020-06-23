@@ -1,10 +1,15 @@
 package com.javawds.tankwar;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.util.Random;
 
- class Tank {
+class Tank {
     private int x;
     private int y;
     private Direction direction;
@@ -37,19 +42,19 @@ import java.awt.event.KeyEvent;
             case RIGHT:
                 x+=10;
                 break;
-            case UPLEFT:
+            case LEFT_UP:
                 x-=10;
                 y-=10;
                 break;
-            case UPRIGHT:
+            case RIGHT_UP:
                 x+=10;
                 y-=10;
                 break;
-            case DOWNLEFT:
+            case LEFT_DOWN:
                 x-=10;
                 y+=10;
                 break;
-            case DOWNRIGHT:
+            case RIGHT_DOWN:
                 x+=10;
                 y+=10;
                 break;
@@ -59,17 +64,18 @@ import java.awt.event.KeyEvent;
 
     Image getImage() {
         String prefix = enemy ? "e" : "";
-        switch (direction) {
-            case UP: return Tools.getImage(prefix + "tankU.gif");
-            case DOWN: return Tools.getImage(prefix + "tankD.gif");
-            case LEFT: return Tools.getImage(prefix + "tankL.gif");
-            case RIGHT: return Tools.getImage(prefix + "tankR.gif");
-            case UPLEFT: return Tools.getImage(prefix +  "tankLU.gif");
-            case UPRIGHT: return Tools.getImage(prefix +  "tankRU.gif");
-            case DOWNLEFT: return Tools.getImage(prefix + "tankLD.gif");
-            case DOWNRIGHT: return Tools.getImage(prefix +  "tankRD.gif");
-        }
-        return null;
+        return direction.getImage(prefix + "tank");
+//        switch (direction) {
+//            case UP: return Tools.getImage(prefix + "tankU.gif");
+//            case DOWN: return Tools.getImage(prefix + "tankD.gif");
+//            case LEFT: return Tools.getImage(prefix + "tankL.gif");
+//            case RIGHT: return Tools.getImage(prefix + "tankR.gif");
+//            case UPLEFT: return Tools.getImage(prefix +  "tankLU.gif");
+//            case UPRIGHT: return Tools.getImage(prefix +  "tankRU.gif");
+//            case DOWNLEFT: return Tools.getImage(prefix + "tankLD.gif");
+//            case DOWNRIGHT: return Tools.getImage(prefix +  "tankRD.gif");
+//        }
+//        return null;
     }
 
     void draw(Graphics g) {
@@ -130,6 +136,9 @@ import java.awt.event.KeyEvent;
             case KeyEvent.VK_CONTROL:
                 fire();
                 break;
+            case KeyEvent.VK_A:
+                superFire();
+                break;
         }
         this.determineDirection();
     }
@@ -138,7 +147,25 @@ import java.awt.event.KeyEvent;
          Missile missile = new Missile(x + getImage().getWidth(null) / 2 - 5,
                  y + getImage().getHeight(null) / 2 - 5, enemy, direction);
          GameClient.getInstance().getMissiles().add(missile);
+        playAudio("shoot.wav");
     }
+
+    private void superFire() {
+         for (Direction direction : Direction.values()) {
+             Missile missile = new Missile(x + getImage().getWidth(null) / 2 - 5,
+                     y + getImage().getHeight(null) / 2 - 5, enemy, direction);
+             GameClient.getInstance().getMissiles().add(missile);
+         }
+        String audioFile = new Random().nextBoolean() ? "supershoot.aiff" : "supershoot.wav";
+        playAudio(audioFile);
+    }
+
+    private void playAudio(String fileName) {
+        Media sound = new Media(new File("assets/audios/" + fileName).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+    }
+
 
     private boolean stopped;
 
@@ -153,13 +180,13 @@ import java.awt.event.KeyEvent;
             } else if (!up && left && !down && !right) {
                 this.direction = Direction.LEFT;
             } else if (up && left && !down && !right) {
-                this.direction = Direction.UPLEFT;
+                this.direction = Direction.LEFT_UP;
             } else if (up && !left && !down && right) {
-                this.direction = Direction.UPRIGHT;
+                this.direction = Direction.RIGHT_UP;
             } else if (!up && left && down && !right) {
-                this.direction = Direction.DOWNLEFT;
+                this.direction = Direction.LEFT_DOWN;
             } else if (!up && !left && down && right) {
-                this.direction = Direction.DOWNRIGHT;
+                this.direction = Direction.RIGHT_DOWN;
             } else if (!up && !left && !down && right) {
                 this.direction = Direction.RIGHT;
             }
