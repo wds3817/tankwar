@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.Random;
 
 class Tank {
+    private static final int MOVE_SPEED = 10;
     private int x;
     private int y;
     private Direction direction;
@@ -29,36 +30,38 @@ class Tank {
 
      private void move() {
         if (this.stopped) return;
-        switch (direction) {
-            case UP:
-                y-=10;
-                break;
-            case DOWN:
-                y+=10;
-                break;
-            case LEFT:
-                x-=10;
-                break;
-            case RIGHT:
-                x+=10;
-                break;
-            case LEFT_UP:
-                x-=10;
-                y-=10;
-                break;
-            case RIGHT_UP:
-                x+=10;
-                y-=10;
-                break;
-            case LEFT_DOWN:
-                x-=10;
-                y+=10;
-                break;
-            case RIGHT_DOWN:
-                x+=10;
-                y+=10;
-                break;
-        }
+        x += direction.xFactor * MOVE_SPEED;
+        y += direction.yFactor * MOVE_SPEED;
+//        switch (direction) {
+//            case UP:
+//                y-= MOVE_SPEED;
+//                break;
+//            case DOWN:
+//                y+=MOVE_SPEED;
+//                break;
+//            case LEFT:
+//                x-=MOVE_SPEED;
+//                break;
+//            case RIGHT:
+//                x+=MOVE_SPEED;
+//                break;
+//            case LEFT_UP:
+//                x-=MOVE_SPEED;
+//                y-=MOVE_SPEED;
+//                break;
+//            case RIGHT_UP:
+//                x+=MOVE_SPEED;
+//                y-=MOVE_SPEED;
+//                break;
+//            case LEFT_DOWN:
+//                x-=MOVE_SPEED;
+//                y+=MOVE_SPEED;
+//                break;
+//            case RIGHT_DOWN:
+//                x+=MOVE_SPEED;
+//                y+=MOVE_SPEED;
+//                break;
+//        }
         //return null;
     }
 
