@@ -8,6 +8,7 @@ public class Tank {
     private int x;
     private int y;
     private Direction direction;
+    private boolean enemy;
 
     public void setX(int x) {
         this.x = x;
@@ -26,9 +27,14 @@ public class Tank {
     }
 
     public Tank(int x, int y, Direction direction) {
+        this(x, y, false, direction);
+    }
+
+    public Tank(int x, int y, boolean enemy, Direction direction) {
         this.x = x;
         this.y = y;
         this.direction = direction;
+        this.enemy = enemy;
     }
 
     void move() {
@@ -67,15 +73,16 @@ public class Tank {
     }
 
     Image getImage() {
+        String prefix = enemy ? "e" : "";
         switch (direction) {
-            case UP: return new ImageIcon("assets/images/tankU.gif").getImage();
-            case DOWN: return new ImageIcon("assets/images/tankD.gif").getImage();
-            case LEFT: return new ImageIcon("assets/images/tankL.gif").getImage();
-            case RIGHT: return new ImageIcon("assets/images/tankR.gif").getImage();
-            case UPLEFT: return new ImageIcon("assets/images/tankLU.gif").getImage();
-            case UPRIGHT: return new ImageIcon("assets/images/tankRU.gif").getImage();
-            case DOWNLEFT: return new ImageIcon("assets/images/tankLD.gif").getImage();
-            case DOWNRIGHT: return new ImageIcon("assets/images/tankRD.gif").getImage();
+            case UP: return new ImageIcon("assets/images/" + prefix + "tankU.gif").getImage();
+            case DOWN: return new ImageIcon("assets/images/" + prefix + "tankD.gif").getImage();
+            case LEFT: return new ImageIcon("assets/images/" + prefix + "tankL.gif").getImage();
+            case RIGHT: return new ImageIcon("assets/images/" + prefix + "tankR.gif").getImage();
+            case UPLEFT: return new ImageIcon("assets/images/" + prefix + "tankLU.gif").getImage();
+            case UPRIGHT: return new ImageIcon("assets/images/" + prefix + "tankRU.gif").getImage();
+            case DOWNLEFT: return new ImageIcon("assets/images/" + prefix + "tankLD.gif").getImage();
+            case DOWNRIGHT: return new ImageIcon("assets/images/" + prefix + "tankRD.gif").getImage();
         }
         return null;
     }
