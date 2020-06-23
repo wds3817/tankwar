@@ -4,69 +4,54 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class Tank {
+ class Tank {
     private int x;
     private int y;
     private Direction direction;
     private boolean enemy;
 
-    public void setX(int x) {
-        this.x = x;
-    }
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public Tank(int x, int y, Direction direction) {
+     Tank(int x, int y, Direction direction) {
         this(x, y, false, direction);
     }
 
-    public Tank(int x, int y, boolean enemy, Direction direction) {
+     Tank(int x, int y, boolean enemy, Direction direction) {
         this.x = x;
         this.y = y;
         this.direction = direction;
         this.enemy = enemy;
     }
 
-    void move() {
+     private void move() {
         if (this.stopped) return;
         switch (direction) {
             case UP:
-                y-=5;
+                y-=10;
                 break;
             case DOWN:
-                y+=5;
+                y+=10;
                 break;
             case LEFT:
-                x-=5;
+                x-=10;
                 break;
             case RIGHT:
-                x+=5;
+                x+=10;
                 break;
             case UPLEFT:
-                x-=5;
-                y-=5;
+                x-=10;
+                y-=10;
                 break;
             case UPRIGHT:
-                x+=5;
-                y-=5;
+                x+=10;
+                y-=10;
                 break;
             case DOWNLEFT:
-                x-=5;
-                y+=5;
+                x-=10;
+                y+=10;
                 break;
             case DOWNRIGHT:
-                x+=5;
-                y+=5;
+                x+=10;
+                y+=10;
                 break;
         }
         //return null;
@@ -88,6 +73,7 @@ public class Tank {
     }
 
     void draw(Graphics g) {
+        int oldx = x, oldy = y;
         this.determineDirection();
         this.move();
 
@@ -101,13 +87,33 @@ public class Tank {
         } else if (y > 600 - getImage().getHeight(null)) {
             y = 600 - getImage().getHeight(null);
         }
+        Rectangle rec = this.getRectangle();
+        for (Wall wall : GameClient.getInstance().getWalls()) {
+            if (rec.intersects(wall.getRectangle())) {
+                x = oldx;
+                y = oldy;
+                break;
+                //return;
+            }
+        }
 
+        for (Tank enemyTank : GameClient.getInstance().getEnemyTanks()) {
+            if (rec.intersects(enemyTank.getRectangle())) {
+                x = oldx;
+                y = oldy;
+                break;
+            }
+        }
         g.drawImage(this.getImage(), this.x, this.y, null);
+    }
+
+     private Rectangle getRectangle() {
+        return new Rectangle(x, y, getImage().getWidth(null), getImage().getHeight(null));
     }
 
     private boolean up, down, left, right;
 
-    public void keyPressed(KeyEvent e) {
+     void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
                 up = true;
@@ -151,7 +157,7 @@ public class Tank {
         }
     }
 
-    public void keyRelease(KeyEvent e) {
+     void keyRelease(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
                 up = false;
