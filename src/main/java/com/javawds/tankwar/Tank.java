@@ -98,11 +98,10 @@ class Tank {
     }
 
     void draw(Graphics g) {
-         if (!this.live) {
-
-         }
         int oldx = x, oldy = y;
-        this.determineDirection();
+        if (!this.enemy) {
+            this.determineDirection();
+        }
         this.move();
 
         if (x < 0) {
@@ -126,12 +125,27 @@ class Tank {
         }
 
         for (Tank enemyTank : GameClient.getInstance().getEnemyTanks()) {
-            if (rec.intersects(enemyTank.getRectangle())) {
+            if (enemyTank != this && rec.intersects(enemyTank.getRectangle())) {
                 x = oldx;
                 y = oldy;
                 break;
             }
         }
+
+        if (this.enemy && rec.intersects(GameClient.getInstance()
+            .getPlayerTank().getRectangle())) {
+            x = oldx;
+            y = oldy;
+        }
+
+        if (!enemy) {
+            g.setColor(Color.WHITE);
+            g.fillRect(x, y - 10, this.getImage().getWidth(null), 10);
+            g.setColor(Color.RED);
+            int width = hp * this.getImage().getHeight(null) / 100;
+            g.fillRect(x, y - 10, width, 10);
+        }
+
         g.drawImage(this.getImage(), this.x, this.y, null);
     }
 
@@ -160,6 +174,9 @@ class Tank {
                 break;
             case KeyEvent.VK_A:
                 superFire();
+                break;
+            case KeyEvent.VK_F2:
+                GameClient.getInstance().restart();
                 break;
         }
         this.determineDirection();
@@ -228,4 +245,18 @@ class Tank {
         //this.determineDirection();
     }
 
+    private final Random random = new Random();
+    private int step = random.nextInt(12) + 3;
+
+    void actRandomly() {
+        Direction[] dirs = Direction.values();
+        if (step == 0) {
+            step = random.nextInt(12) + 3;
+            this.direction = dirs[random.nextInt(dirs.length)];
+            if (random.nextBoolean()) {
+                this.fire();
+            }
+        }
+        step--;
+    }
 }
