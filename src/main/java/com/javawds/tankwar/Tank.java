@@ -246,12 +246,12 @@ class Tank {
     }
 
     private final Random random = new Random();
-    private int step = random.nextInt(12) + 3;
+    private int step = random.nextInt(12) + 1;
 
     void actRandomly() {
         Direction[] dirs = Direction.values();
         if (step == 0) {
-            step = random.nextInt(12) + 3;
+            step = random.nextInt(12) + 1;
             this.direction = dirs[random.nextInt(dirs.length)];
             if (random.nextBoolean()) {
                 this.fire();
